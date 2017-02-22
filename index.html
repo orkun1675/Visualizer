@@ -10,40 +10,57 @@
 		<link rel="stylesheet" type="text/css" href="main.css">
 	</head>
 	<body>
-		<h1>Welcome!</h1>
+		<h1>Welcome to the D3 Visualizer!</h1>
 	</body>
 
 	<script type="application/javascript">
-		function readTextFile(file)
+		function escapeHtml(unsafe) {
+		return unsafe
+		     .replace(/&/g, "&amp;")
+		     .replace(/</g, "&lt;")
+		     .replace(/>/g, "&gt;")
+		     .replace(/"/g, "&quot;")
+		     .replace(/'/g, "&#039;");
+		}
+
+		function readTextFile(file, target)
 		{
 		    var rawFile = new XMLHttpRequest();
 		    rawFile.open("GET", file, false);
-		    rawFile.onreadystatechange = function ()
+		    rawFile.onload = function ()
 		    {
 		        if(rawFile.readyState === 4)
 		        {
 		            if(rawFile.status === 200 || rawFile.status == 0)
 		            {
-		                var allText = rawFile.responseText;
-		                return allText;
+		                target.innerHTML = escapeHtml(rawFile.responseText);
 		            }
 		        }
 		    }
 		    rawFile.send(null);
-		    return "ERROR";
 		}
 
 		function createIFrame(sampleID) {
 			var iframe = document.createElement("iframe");
 			iframe.src = "samples/" + sampleID + "/index.html";
 			iframe.className = "standart";
-			iframe.innerHtml = "Your browser does not support javascript.";
+			iframe.innerHTML = "Your browser does not support javascript.";
 			return iframe;
 		}
 
 		function createCodeView(sampleID) {
 			var div = document.createElement("div");
-			div.innerHtml = readTextFile("samples/" + sampleID + "/index.html");
+			div.className = "code";
+			div.onscroll = function () {
+				var codeDivs = document.getElementsByClassName("code");
+				for (var i = 0; i < codeDivs.length; i++) {
+					if (codeDivs[i] === div) {
+						continue;
+					}
+					codeDivs[i].scrollTop = div.scrollTop;
+				}
+			};
+			readTextFile("samples/" + sampleID + "/index.html", div);
 			return div;
 		}
 
