@@ -7,11 +7,61 @@
 		<meta name="author" content="Berkeley">
 		<meta name="keywords" content="D3, Data, Visual">
 		<link rel="shortcut icon" href="images/icon.ico" type="image/x-icon" />
+		<link rel="stylesheet" type="text/css" href="main.css">
 	</head>
 	<body>
 		<h1>Welcome!</h1>
-		<iframe src="samples/1">
-			<p>Your browser does not support iframes.</p>
-		</iframe>
 	</body>
+
+	<script type="application/javascript">
+		function readTextFile(file)
+		{
+		    var rawFile = new XMLHttpRequest();
+		    rawFile.open("GET", file, false);
+		    rawFile.onreadystatechange = function ()
+		    {
+		        if(rawFile.readyState === 4)
+		        {
+		            if(rawFile.status === 200 || rawFile.status == 0)
+		            {
+		                var allText = rawFile.responseText;
+		                return allText;
+		            }
+		        }
+		    }
+		    rawFile.send(null);
+		    return "ERROR";
+		}
+
+		function createIFrame(sampleID) {
+			var iframe = document.createElement("iframe");
+			iframe.src = "samples/" + sampleID + "/index.html";
+			iframe.className = "standart";
+			iframe.innerHtml = "Your browser does not support javascript.";
+			return iframe;
+		}
+
+		function createCodeView(sampleID) {
+			var div = document.createElement("div");
+			div.innerHtml = readTextFile("samples/" + sampleID + "/index.html");
+			return div;
+		}
+
+		function createColumnDiv(sampleID) {
+			var div = document.createElement("div");
+			div.className = "col-3";
+			div.appendChild(createIFrame(sampleID));
+			div.appendChild(createCodeView(sampleID));
+			return div;
+		}
+
+		var SAMPLES_USED = [1, 2, 3];
+		var container = document.createElement("div");
+		container.className = "container";
+		for (var i = 0; i < SAMPLES_USED.length; i++) {
+			sampleID = SAMPLES_USED[i];
+			container.appendChild(createColumnDiv(sampleID));
+		}
+		document.body.appendChild(container);
+	</script>
 </html>

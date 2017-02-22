@@ -1,0 +1,22 @@
+div {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+div.container {
+    width: 100%;
+    border: 1px solid red;
+}
+
+div.col-3 {
+    width: 33.33333%;
+    border: 1px solid purple;
+    float: left;
+    padding: 1%;
+}
+
+iframe.standart {
+	width: 100%;
+	height: 600px;
+}
